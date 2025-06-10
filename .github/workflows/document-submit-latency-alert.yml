@@ -1,6 +1,7 @@
 name: Document Submit Latency Alert
 on:
-  workflow_dispatch:
+  repository_dispatch:
+    types: [prometheus_alert]
 
 jobs:
   handle-alert:
@@ -11,5 +12,5 @@ jobs:
       id: parse
       shell: pwsh
       run: |
-        $alert =  '${{ toJson(github.event.inputs) }}' | ConvertFrom-Json
+        $alert =  '${{ toJson(github.event.client_payload) }}' | ConvertFrom-Json
         $alert
