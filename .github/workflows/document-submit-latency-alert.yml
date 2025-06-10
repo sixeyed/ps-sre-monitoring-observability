@@ -10,16 +10,7 @@ jobs:
     steps:      
     - name: Parse Alert Data
       id: parse
+      shell: pwsh
       run: |
-        echo "Alert Status: ${{ github.event.client_payload.status }}"
-        echo "Number of alerts: $(echo '${{ toJson(github.event.client_payload.alerts) }}' | jq length)"
-        
-        # Extract first alert details
-        FIRST_ALERT=$(echo '${{ toJson(github.event.client_payload.alerts) }}' | jq '.[0]')
-        ALERT_NAME=$(echo $FIRST_ALERT | jq -r '.labels.alertname // "Unknown"')
-        INSTANCE=$(echo $FIRST_ALERT | jq -r '.labels.instance // "Unknown"')
-        SEVERITY=$(echo $FIRST_ALERT | jq -r '.labels.severity // "info"')
-        
-        echo "alert_name=$ALERT_NAME" >> $GITHUB_OUTPUT
-        echo "instance=$INSTANCE" >> $GITHUB_OUTPUT
-        echo "severity=$SEVERITY" >> $GITHUB_OUTPUT
+        $alert =  '${{ toJson(github.event.client_payload) }}' | ConvertFrom-Json
+        $alert
