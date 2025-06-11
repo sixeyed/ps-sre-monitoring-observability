@@ -1,4 +1,5 @@
-name: Infrastructure Major Outage Alert
+name: 'Infrastructure Major Outage Alert: ${{ github.event.client_payload.alerts[0].status }}'
+
 on:
   repository_dispatch:
     types: [InfrastructureMajorOutage]
