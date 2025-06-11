@@ -32,13 +32,13 @@ jobs:
 
     - name: Azure Login
       uses: azure/login@v1
-      if: steps.parse.output.status == firing
+      if: steps.parse.output.status == 'firing'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Reset feature flag
       uses: azure/cli@v2
-      if: steps.parse.output.status == firing
+      if: steps.parse.output.status == 'firing'
       with:
         inlineScript: |
           az account show
