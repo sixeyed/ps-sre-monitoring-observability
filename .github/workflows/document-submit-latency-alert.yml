@@ -21,13 +21,6 @@ jobs:
         echo "Severity: $($alert.commonLabels.severity)"
         echo "Status: $($alert.alerts[0].status)"
 
-    - name: Debug
-      shell: pwsh
-      run: |
-        echo "ALERT_STATUS: $($env:ALERT_STATUS)"
-      env:
-        ALERT_STATUS: ${{ steps.parse-alert.output.alert-status }} 
-
     - name: Azure Login
       uses: azure/login@v1
       with:
