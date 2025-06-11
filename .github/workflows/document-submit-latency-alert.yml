@@ -1,7 +1,7 @@
 name: Document Submit Latency Alert
 on:
   repository_dispatch:
-    types: [prometheus_alert]
+    types: [DocumentSubmitLatency]
 
 env:
   AZURE_RESOURCE_GROUP: psod-sre-monitoring-observability
