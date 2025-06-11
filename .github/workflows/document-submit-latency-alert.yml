@@ -16,8 +16,9 @@ jobs:
       shell: pwsh
       run: |
         $alert =  '${{ toJson(github.event.client_payload) }}' | ConvertFrom-Json
-        echo "Alert labels: $($alert.commonLabels)"
-        echo "Alert status: $($alert.alerts[0].status)"
+        echo "Alert name: $($alert.commonLabels.alertName)"
+        echo "Severity: $($alert.commonLabels.severity)"
+        echo "Status: $($alert.alerts[0].status)"
 
     - name: Azure Login
       uses: azure/login@v1
