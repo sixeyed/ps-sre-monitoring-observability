@@ -3,6 +3,10 @@ on:
   repository_dispatch:
     types: [prometheus_alert]
 
+env:
+  AZURE_RESOURCE_GROUP: psod-sre-monitoring-observability
+  AZURE_LOCATION: westeurope
+
 jobs:
   handle-alert:
     runs-on: ubuntu-latest
@@ -24,5 +28,7 @@ jobs:
       uses: azure/cli@v2
       with:
         inlineScript: |
+          az account show
+          az appconfig list -o table
           az appconfig kv set -n fulfilment-app --key 'Fulfilment:AuthSettings:UseExperimentalIdp' --value 'false' --yes
 
