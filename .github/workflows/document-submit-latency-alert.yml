@@ -13,27 +13,32 @@ jobs:
     
     steps:      
     - name: Parse alert
-      id: parseAlert
+      id: parse
       shell: pwsh
       run: |
         $alert =  '${{ toJson(github.event.client_payload) }}' | ConvertFrom-Json
         echo "Alert name: $($alert.commonLabels.alertName)"
         echo "Severity: $($alert.commonLabels.severity)"
-        echo "Status: $($alert.alerts[0].status)"
-        if ($alert.alerts[0].status -eq 'firing') {
-          echo 'Alert firing. Setting output variable firing=true.'
-          echo "firing=true" >> $env.GITHUB_OUTPUT
-        }
+        $status = $alert.alerts[0].status
+        echo "Status: $status"
+        echo "status=$status" >> $env.GITHUB_OUTPUT
+
+    - name: Debug
+      shell: pwsh
+      run: |
+        echo "ALERT_STATUS: $($env:ALERT_STATUS)"
+      env:
+        ALERT_STATUS: ${{ steps.parse.output.status == firing }} 
 
     - name: Azure Login
       uses: azure/login@v1
-      if: steps.parseAlert.output.firing == true
+      if: steps.parse.output.status == firing
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Reset feature flag
       uses: azure/cli@v2
-      if: steps.parseAlert.output.firing == true
+      if: steps.parse.output.status == firing
       with:
         inlineScript: |
           az account show
