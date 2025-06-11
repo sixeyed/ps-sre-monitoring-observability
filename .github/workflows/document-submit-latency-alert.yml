@@ -28,7 +28,7 @@ jobs:
       run: |
         echo "ALERT_STATUS: $($env:ALERT_STATUS)"
       env:
-        ALERT_STATUS: ${{ steps.parse.output.status == firing }} 
+        ALERT_STATUS: ${{ steps.parse.output.status }} 
 
     - name: Azure Login
       uses: azure/login@v1
