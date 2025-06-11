@@ -19,9 +19,7 @@ jobs:
         $alert =  '${{ toJson(github.event.client_payload) }}' | ConvertFrom-Json
         echo "Alert name: $($alert.commonLabels.alertName)"
         echo "Severity: $($alert.commonLabels.severity)"
-        $status = $alert.alerts[0].status
-        echo "Status: $status"
-        echo "alert-status=$status" >> $env.GITHUB_OUTPUT
+        echo "Status: $($alert.alerts[0].status)"
 
     - name: Debug
       shell: pwsh
@@ -32,13 +30,11 @@ jobs:
 
     - name: Azure Login
       uses: azure/login@v1
-      if: steps.parse-alert.output.alert-status == 'firing'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Reset feature flag
       uses: azure/cli@v2
-      if: steps.parse-alert.output.alert-status == 'firing'
       with:
         inlineScript: |
           az account show
