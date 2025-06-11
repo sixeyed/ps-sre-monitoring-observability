@@ -22,7 +22,7 @@ jobs:
         echo "Status: $($alert.alerts[0].status)"
         if ($alert.alerts[0].status -eq 'firing') {
           echo 'Alert firing. Setting output variable firing=true.'
-          echo "{firing}={true}" >> $GITHUB_OUTPUT
+          echo "{firing}={true}" >> $env.GITHUB_OUTPUT
         }
 
     - name: Azure Login
