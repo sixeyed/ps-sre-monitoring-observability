@@ -1,8 +1,10 @@
-name: 'Infrastructure Major Outage Alert: ${{ github.event.client_payload.alerts[0].status }}'
+name: Infrastructure Major Outage Alert
+run-name: ${{ github.event.client_payload.alerts[0].status }}
 
 on:
   repository_dispatch:
     types: [InfrastructureMajorOutage]
+    
 jobs:
   handle-alert:
     runs-on: ubuntu-latest
