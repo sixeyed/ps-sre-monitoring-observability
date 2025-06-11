@@ -3,10 +3,6 @@ on:
   repository_dispatch:
     types: [prometheus_alert]
 
-env:
-  AZURE_RESOURCE_GROUP: my-resource-group
-  AZURE_LOCATION: eastus
-
 jobs:
   handle-alert:
     runs-on: ubuntu-latest
