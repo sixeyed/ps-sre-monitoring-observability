@@ -4,7 +4,6 @@ on:
     types: [prometheus_alert]
 
 env:
-  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   AZURE_RESOURCE_GROUP: my-resource-group
   AZURE_LOCATION: eastus
 
@@ -14,20 +13,20 @@ jobs:
     
     steps:      
     - name: Debug
-      id: debug
       shell: pwsh
       run: |
         $alert =  '${{ toJson(github.event.client_payload) }}' | ConvertFrom-Json
-        $alert
+        echo "Alert labels: $($alert.commonLabels)"
+        echo "Alert status: $($alert.alerts[0].status)"
 
     - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Azure CLI script
+    - name: Reset feature flag
       uses: azure/cli@v2
       with:
         inlineScript: |
-          az account show
+          az appconfig kv set -n fulfilment-app --key 'Fulfilment:AuthSettings:UseExperimentalIdp' --value 'false' --yes
 
