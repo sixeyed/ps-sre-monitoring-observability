@@ -1,5 +1,5 @@
 name: Infrastructure Half Outage Alert
-run-name: ${{ github.event.client_payload.alerts[0].status }}
+run-name: 'Infrastructure Half Outage Alert: ${{ github.event.client_payload.alerts[0].status }}'
 
 on:
   repository_dispatch:

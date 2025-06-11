@@ -1,4 +1,6 @@
 name: Document Submit Latency Alert
+run-name: 'Document Submit Latency Alert: ${{ github.event.client_payload.alerts[0].status }}'
+
 on:
   repository_dispatch:
     types: [DocumentSubmitLatency]
