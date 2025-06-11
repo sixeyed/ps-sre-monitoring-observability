@@ -1,0 +1,30 @@
+name: Infrastructure Major Outage Alert
+on:
+  repository_dispatch:
+    types: [InfrastructureMajorOutage]
+jobs:
+  handle-alert:
+    runs-on: ubuntu-latest
+    
+    steps:      
+    - name: Parse alert
+      id: parse-alert
+      shell: pwsh
+      run: |
+        $alert =  '${{ toJson(github.event.client_payload) }}' | ConvertFrom-Json
+        echo "Alert name: $($alert.commonLabels.alertName)"
+        echo "Severity: $($alert.commonLabels.severity)"
+        echo "Status: $($alert.alerts[0].status)"
+
+    - name: Switch to DR
+      if: github.event.client_payload.alerts[0].status == 'firing'
+      shell: pwsh
+      run: |
+        echo 'Pointing DNS to DR environment'
+
+    - name: Switch back to prod
+      if: github.event.client_payload.alerts[0].status == 'resolved'
+      shell: pwsh
+      run: |
+        echo 'Pointing DNS to prod environment'
+
