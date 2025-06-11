@@ -22,11 +22,13 @@ jobs:
         echo "Status: $($alert.alerts[0].status)"
 
     - name: Azure Login
+      if: github.event.client_payload.alerts[0].status == 'firing'
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Reset feature flag
+      if: github.event.client_payload.alerts[0].status == 'firing'
       uses: azure/cli@v2
       with:
         inlineScript: |
